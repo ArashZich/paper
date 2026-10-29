@@ -1,0 +1,1 @@
+Redesigned screen with icons, Kindle/Boox/Night presets, on/off schedule, and a reliable restore when turned off.
