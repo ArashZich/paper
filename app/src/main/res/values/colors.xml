@@ -1,0 +1,12 @@
+<resources>
+    <color name="bg">#FFF6EEDC</color>
+    <color name="card">#FFFFFBF1</color>
+    <color name="ink">#FF2B2823</color>
+    <color name="ink_soft">#FF6F675A</color>
+    <color name="accent">#FF2B2823</color>
+    <color name="on_accent">#FFF6EEDC</color>
+    <color name="chip">#FFE9DFC7</color>
+    <color name="icon_bg">#FF26231F</color>
+    <color name="icon_page">#FFF4ECD8</color>
+    <color name="icon_sun">#FFE8A33D</color>
+</resources>

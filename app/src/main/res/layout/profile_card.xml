@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/ink"
+        android:textSize="17sp"
+        android:textStyle="bold" />
+
+    <Switch
+        android:id="@+id/gray"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:text="@string/grayscale"
+        android:textColor="@color/ink" />
+
+    <Switch
+        android:id="@+id/contrast"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:text="@string/contrast"
+        android:textColor="@color/ink" />
+
+    <Switch
+        android:id="@+id/anim"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:text="@string/no_anim"
+        android:textColor="@color/ink" />
+
+    <Switch
+        android:id="@+id/paper"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:text="@string/xiaomi_paper"
+        android:textColor="@color/ink" />
+
+    <TextView
+        android:id="@+id/warm_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textColor="@color/ink" />
+
+    <SeekBar
+        android:id="@+id/warm"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:max="100" />
+
+    <TextView
+        android:id="@+id/dim_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/ink" />
+
+    <SeekBar
+        android:id="@+id/dim"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:max="100" />
+</LinearLayout>

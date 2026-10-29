@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">کاغذ</string>
+    <string name="tagline">کل صفحه گوشی را مثل کتاب‌خوان کن</string>
+
+    <string name="mode_off">خاموش</string>
+    <string name="mode_day">روز</string>
+    <string name="mode_night">شب</string>
+    <string name="mode_auto">خودکار</string>
+
+    <string name="setup_title">تنظیم یک‌باره</string>
+    <string name="setup_body">گزینه‌های توسعه‌دهنده را فعال کن، USB debugging (و در شیائومی «USB debugging (Security settings)») را روشن کن، گوشی را به کامپیوتر وصل کن و این دستور را بزن:</string>
+    <string name="copy">کپی دستور</string>
+    <string name="copied">کپی شد</string>
+
+    <string name="day_look">ظاهر روز</string>
+    <string name="night_look">ظاهر شب</string>
+    <string name="grayscale">خاکستری (رنگ e-ink)</string>
+    <string name="contrast">متن با کنتراست بالا</string>
+    <string name="no_anim">بدون انیمیشن</string>
+    <string name="xiaomi_paper">حالت مطالعه شیائومی (در صورت وجود)</string>
+    <string name="warmth">فیلتر نور آبی: %1$d٪</string>
+    <string name="dim">کم‌نور اضافه: %1$d٪</string>
+
+    <string name="schedule">زمان‌بندی خودکار</string>
+    <string name="night_from">شروع شب</string>
+    <string name="night_to">پایان شب</string>
+    <string name="schedule_hint">در حالت خودکار بین این دو ساعت ظاهر شب و بقیه روز ظاهر روز اعمال می‌شود.</string>
+    <string name="footer">فقط تنظیمات نمایشگر سیستم را عوض می‌کند و با «خاموش» همه‌چیز به حالت قبل برمی‌گردد.</string>
+</resources>

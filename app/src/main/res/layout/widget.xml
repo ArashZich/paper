@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/widget_bg"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:padding="8dp">
+
+    <TextView
+        android:id="@+id/w_off"
+        style="@style/Chip"
+        android:text="@string/mode_off" />
+
+    <TextView
+        android:id="@+id/w_day"
+        style="@style/Chip"
+        android:text="@string/mode_day" />
+
+    <TextView
+        android:id="@+id/w_night"
+        style="@style/Chip"
+        android:text="@string/mode_night" />
+
+    <TextView
+        android:id="@+id/w_auto"
+        style="@style/Chip"
+        android:text="@string/mode_auto" />
+</LinearLayout>
