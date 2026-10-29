@@ -1,0 +1,14 @@
+Paper makes your whole phone look like an e-reader, inside every app and not only on the home screen.
+
+• Grayscale (e-ink colors), blue-light filter, extra dim, high-contrast text, no animations
+• Separate Day and Night looks, each fully adjustable
+• Modes: Off, Day, Night, Auto (switches on a schedule you choose)
+• Home-screen widget and Quick Settings tile
+• Tiny (about 45 KB), no background service, no internet access, no ads or tracking
+• Turning it off puts every system setting back exactly as it was
+
+Paper uses Android's own display settings (color correction, Night Light, Extra dim). Android requires a one-time permission that can only be granted over adb:
+
+adb shell pm grant ir.arashzich.papermode android.permission.WRITE_SECURE_SETTINGS
+
+The app shows this command with a copy button.

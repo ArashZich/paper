@@ -53,5 +53,11 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
+    // F-Droid rejects the Google-signed dependency blob AGP adds by default.
+    dependenciesInfo {
+        includeInApk = false
+        includeInBundle = false
+    }
+
     lint { abortOnError = false }
 }
