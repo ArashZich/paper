@@ -2,20 +2,19 @@
 
 # Paper — کاغذ
 
-Turn your whole Android screen into an e-reader: grayscale, blue-light filter, extra dim, high-contrast text and no
-animations, system-wide (inside every app, not just the home screen). Manual or on an automatic day/night schedule.
+Make your whole Android screen look like an e-reader (Kindle, Boox, Fidibook): no colors, paper-grey instead of glaring
+white, bold black text, no animations. It works system-wide, inside every app, not just on the home screen.
 
-- **~45 KB**, no dependencies, no background service, no internet permission
-- Day and Night looks, each with its own settings
-- Modes: **Off / Day / Night / Auto**
+- **One button** (On / Off) and one slider for the paper tone; an optional warm-light slider for night reading
 - Home-screen **widget** and **Quick Settings tile**
+- **~40 KB**, no dependencies, no background service, no internet permission
 - Turning it off puts every setting back exactly as it was
 
 ## How it works
 
-Paper changes the same display settings Android's own *Color correction (monochromacy)*, *Night Light*,
-*Extra dim*, *High contrast text* and *Animation scale* use. Nothing runs in the background: settings are written when you
-change mode, and one inexact alarm re-applies them at the next day/night boundary (also after reboot).
+Paper changes the same display settings Android's own *Color correction (monochromacy)*, *Extra dim*, *Night Light*,
+*High contrast text*, dark-theme and *Animation scale* use. Nothing runs in the background: the settings are written when
+you switch it on or off (and re-applied after a reboot).
 
 ## Install
 

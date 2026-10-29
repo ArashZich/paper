@@ -6,85 +6,71 @@ import android.content.pm.PackageManager
 import android.provider.Settings
 
 /**
- * Applies a [Profile] through system settings. Needs WRITE_SECURE_SETTINGS (granted once over adb).
- * Every key we change is remembered the first time, and put back by [restore].
+ * Makes the screen look like an e-reader through system display settings.
+ * Needs WRITE_SECURE_SETTINGS (granted once over adb). The first value of every key we touch is
+ * remembered and put back by [restore].
  */
 object Tweaks {
     private const val UNSET = "\u0000"
 
-    private enum class Table { SECURE, GLOBAL, SYSTEM }
+    private class Key(val global: Boolean, val name: String)
 
-    private class Key(val table: Table, val name: String)
-
-    private val GRAY_ON = Key(Table.SECURE, "accessibility_display_daltonizer_enabled")
-    private val GRAY_MODE = Key(Table.SECURE, "accessibility_display_daltonizer")
-    private val CONTRAST = Key(Table.SECURE, "high_text_contrast_enabled")
-    private val WARM_ON = Key(Table.SECURE, "night_display_activated")
-    private val WARM_TEMP = Key(Table.SECURE, "night_display_color_temperature")
-    private val DIM_ON = Key(Table.SECURE, "reduce_bright_colors_activated")
-    private val DIM_LEVEL = Key(Table.SECURE, "reduce_bright_colors_level")
+    private val GRAY_ON = Key(false, "accessibility_display_daltonizer_enabled")
+    private val GRAY_MODE = Key(false, "accessibility_display_daltonizer")
+    private val CONTRAST = Key(false, "high_text_contrast_enabled")
+    private val LIGHT_UI = Key(false, "ui_night_mode")
+    private val DIM_ON = Key(false, "reduce_bright_colors_activated")
+    private val DIM_LEVEL = Key(false, "reduce_bright_colors_level")
+    private val WARM_ON = Key(false, "night_display_activated")
+    private val WARM_TEMP = Key(false, "night_display_color_temperature")
     private val ANIM = listOf("window_animation_scale", "transition_animation_scale", "animator_duration_scale")
-        .map { Key(Table.GLOBAL, it) }
-    private val PAPER_ON = Key(Table.SYSTEM, "screen_paper_mode_enabled")
+        .map { Key(true, it) }
+    private val ALL = listOf(GRAY_ON, GRAY_MODE, CONTRAST, LIGHT_UI, DIM_ON, DIM_LEVEL, WARM_ON, WARM_TEMP) + ANIM
 
     fun hasPermission(c: Context) =
         c.checkSelfPermission(Manifest.permission.WRITE_SECURE_SETTINGS) == PackageManager.PERMISSION_GRANTED
 
     fun adbCommand(c: Context) = "adb shell pm grant ${c.packageName} android.permission.WRITE_SECURE_SETTINGS"
 
-    private fun read(c: Context, k: Key): String? = when (k.table) {
-        Table.SECURE -> Settings.Secure.getString(c.contentResolver, k.name)
-        Table.GLOBAL -> Settings.Global.getString(c.contentResolver, k.name)
-        Table.SYSTEM -> Settings.System.getString(c.contentResolver, k.name)
-    }
+    // Some hidden keys can be written but not read by apps (SecurityException); treat those as "was unset".
+    private fun read(c: Context, k: Key): String? = runCatching {
+        if (k.global) Settings.Global.getString(c.contentResolver, k.name)
+        else Settings.Secure.getString(c.contentResolver, k.name)
+    }.getOrNull()
 
     private fun write(c: Context, k: Key, v: String?) {
         runCatching {
-            when (k.table) {
-                Table.SECURE -> Settings.Secure.putString(c.contentResolver, k.name, v)
-                Table.GLOBAL -> Settings.Global.putString(c.contentResolver, k.name, v)
-                Table.SYSTEM -> Settings.System.putString(c.contentResolver, k.name, v)
-            }
+            if (k.global) Settings.Global.putString(c.contentResolver, k.name, v)
+            else Settings.Secure.putString(c.contentResolver, k.name, v)
         }
     }
 
-    fun apply(c: Context, p: Profile) {
+    fun apply(c: Context, s: Store) {
         if (!hasPermission(c)) return
-        val store = Store(c)
-        val backup = store.saved().toMutableMap()
-        fun set(k: Key, v: String?) {
+        val backup = s.saved().toMutableMap()
+        fun set(k: Key, v: String) {
             backup.getOrPut(k.name) { read(c, k) ?: UNSET }
             write(c, k, v)
         }
 
-        set(GRAY_ON, if (p.grayscale) "1" else "0")
-        if (p.grayscale) set(GRAY_MODE, "0") // 0 = monochromacy
+        set(GRAY_ON, "1"); set(GRAY_MODE, "0")      // 0 = monochromacy: no colors at all
+        set(CONTRAST, "1")                          // black, bold text
+        set(LIGHT_UI, "1")                          // paper is light: never the dark theme
+        ANIM.forEach { set(it, "0") }               // a page appears, it does not slide
 
-        set(CONTRAST, if (p.highContrast) "1" else "0")
+        // White becomes paper-grey; black stays black.
+        if (s.tone > 0) { set(DIM_ON, "1"); set(DIM_LEVEL, s.tone.toString()) } else set(DIM_ON, "0")
+        if (s.warmth > 0) { set(WARM_ON, "1"); set(WARM_TEMP, kelvin(s.warmth).toString()) } else set(WARM_ON, "0")
 
-        val anim = if (p.noAnimations) "0" else "1"
-        ANIM.forEach { set(it, anim) }
-
-        set(WARM_ON, if (p.warmth > 0) "1" else "0")
-        if (p.warmth > 0) set(WARM_TEMP, kelvin(p.warmth).toString())
-
-        set(DIM_ON, if (p.dim > 0) "1" else "0")
-        if (p.dim > 0) set(DIM_LEVEL, (p.dim * 100 / 100).coerceIn(0, 100).toString())
-
-        if (p.xiaomiPaper) set(PAPER_ON, "1") else if (backup.containsKey(PAPER_ON.name)) set(PAPER_ON, "0")
-
-        store.saveBackup(backup)
+        s.saveBackup(backup)
     }
 
     fun restore(c: Context) {
         if (!hasPermission(c)) return
-        val store = Store(c)
-        val keys = (listOf(GRAY_ON, GRAY_MODE, CONTRAST, WARM_ON, WARM_TEMP, DIM_ON, DIM_LEVEL, PAPER_ON) + ANIM)
-            .associateBy { it.name }
-        store.saved().forEach { (name, v) ->
-            keys[name]?.let { write(c, it, if (v == UNSET) null else v) }
-        }
-        store.saveBackup(emptyMap())
+        val s = Store(c)
+        val byName = ALL.associateBy { it.name }
+        s.saved().forEach { (name, v) -> byName[name]?.let { write(c, it, if (v == UNSET) null else v) } }
+        s.saveBackup(emptyMap())
     }
 
     /** 1..100 % -> 4082 K (barely warm) .. 2596 K (very warm), the range Night Light accepts. */

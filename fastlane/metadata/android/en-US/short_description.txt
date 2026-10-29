@@ -1,1 +1,1 @@
-Turn the whole screen into an e-reader: grayscale, blue-light filter, day/night.
+Make the whole screen look like an e-reader: grayscale, paper tone, bold text.

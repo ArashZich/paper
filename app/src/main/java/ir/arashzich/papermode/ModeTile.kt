@@ -1,5 +1,7 @@
 package ir.arashzich.papermode
 
+import android.app.PendingIntent
+import android.content.Intent
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
 
@@ -9,10 +11,7 @@ class ModeTile : TileService() {
     override fun onClick() {
         if (!Tweaks.hasPermission(this)) {
             startActivityAndCollapse(
-                android.app.PendingIntent.getActivity(
-                    this, 0, android.content.Intent(this, MainActivity::class.java),
-                    android.app.PendingIntent.FLAG_IMMUTABLE,
-                ),
+                PendingIntent.getActivity(this, 0, Intent(this, MainActivity::class.java), PendingIntent.FLAG_IMMUTABLE),
             )
             return
         }
@@ -22,16 +21,7 @@ class ModeTile : TileService() {
 
     private fun render() {
         val t = qsTile ?: return
-        val mode = Store(this).mode
-        t.state = if (mode == Mode.OFF) Tile.STATE_INACTIVE else Tile.STATE_ACTIVE
-        t.subtitle = getString(modeLabel(mode))
+        t.state = if (Store(this).on) Tile.STATE_ACTIVE else Tile.STATE_INACTIVE
         t.updateTile()
     }
-}
-
-fun modeLabel(m: Mode) = when (m) {
-    Mode.OFF -> R.string.mode_off
-    Mode.DAY -> R.string.mode_day
-    Mode.NIGHT -> R.string.mode_night
-    Mode.AUTO -> R.string.mode_auto
 }

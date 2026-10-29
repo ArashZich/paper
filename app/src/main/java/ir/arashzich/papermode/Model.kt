@@ -2,66 +2,25 @@ package ir.arashzich.papermode
 
 import android.content.Context
 
-enum class Mode { OFF, DAY, NIGHT, AUTO }
-
-/** One look: what gets applied to the whole system while it is active. */
-data class Profile(
-    val grayscale: Boolean,
-    val warmth: Int,        // 0 = off, 100 = warmest the system allows
-    val dim: Int,           // 0 = off, 100 = darkest "reduce bright colors" allows
-    val noAnimations: Boolean,
-    val highContrast: Boolean,
-    val xiaomiPaper: Boolean,
-) {
-    companion object {
-        val DAY = Profile(grayscale = true, warmth = 30, dim = 0, noAnimations = true, highContrast = true, xiaomiPaper = false)
-        val NIGHT = Profile(grayscale = true, warmth = 85, dim = 35, noAnimations = true, highContrast = false, xiaomiPaper = false)
-    }
-}
-
-/** All user choices, kept in one small SharedPreferences file. */
+/** The few choices the user has, in one small SharedPreferences file. */
 class Store(context: Context) {
     private val p = context.applicationContext.getSharedPreferences("paper", Context.MODE_PRIVATE)
 
-    var mode: Mode
-        get() = runCatching { Mode.valueOf(p.getString("mode", null)!!) }.getOrDefault(Mode.OFF)
-        set(v) = p.edit().putString("mode", v.name).apply()
+    var on: Boolean
+        get() = p.getBoolean("on", false)
+        set(v) = p.edit().putBoolean("on", v).apply()
 
-    /** Last mode that was not OFF, so the tile/widget can switch back to it. */
-    var lastActive: Mode
-        get() = runCatching { Mode.valueOf(p.getString("last", null)!!) }.getOrDefault(Mode.AUTO)
-        set(v) = p.edit().putString("last", v.name).apply()
+    /** How grey the white gets, 0..100 (0 = pure white, 100 = dark grey). Default is a light paper grey. */
+    var tone: Int
+        get() = p.getInt("tone", 22)
+        set(v) = p.edit().putInt("tone", v).apply()
 
-    /** Night starts/ends, minutes after midnight. */
-    var nightStart: Int
-        get() = p.getInt("nightStart", 20 * 60)
-        set(v) = p.edit().putInt("nightStart", v).apply()
-    var nightEnd: Int
-        get() = p.getInt("nightEnd", 6 * 60)
-        set(v) = p.edit().putInt("nightEnd", v).apply()
+    /** Optional blue-light filter for night reading, 0 = off. */
+    var warmth: Int
+        get() = p.getInt("warmth", 0)
+        set(v) = p.edit().putInt("warmth", v).apply()
 
-    fun profile(night: Boolean): Profile {
-        val k = if (night) "n_" else "d_"
-        val d = if (night) Profile.NIGHT else Profile.DAY
-        return Profile(
-            grayscale = p.getBoolean(k + "gray", d.grayscale),
-            warmth = p.getInt(k + "warm", d.warmth),
-            dim = p.getInt(k + "dim", d.dim),
-            noAnimations = p.getBoolean(k + "anim", d.noAnimations),
-            highContrast = p.getBoolean(k + "contrast", d.highContrast),
-            xiaomiPaper = p.getBoolean(k + "paper", d.xiaomiPaper),
-        )
-    }
-
-    fun save(night: Boolean, v: Profile) {
-        val k = if (night) "n_" else "d_"
-        p.edit()
-            .putBoolean(k + "gray", v.grayscale).putInt(k + "warm", v.warmth).putInt(k + "dim", v.dim)
-            .putBoolean(k + "anim", v.noAnimations).putBoolean(k + "contrast", v.highContrast)
-            .putBoolean(k + "paper", v.xiaomiPaper).apply()
-    }
-
-    // Settings values as they were before we touched them (key -> value or "\u0000" for "was unset").
+    // Settings values as they were before we touched them (key -> value, or "\u0000" for "was unset").
     fun saved(): Map<String, String> = p.getStringSet("backup", emptySet())!!
         .mapNotNull { e -> e.indexOf('=').takeIf { it > 0 }?.let { e.substring(0, it) to e.substring(it + 1) } }
         .toMap()

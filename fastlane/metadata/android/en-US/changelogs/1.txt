@@ -1,1 +1,1 @@
-First release: Day/Night looks, Auto schedule, widget and Quick Settings tile.
+First release: one-tap e-reader look, paper tone slider, widget and Quick Settings tile.

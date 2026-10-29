@@ -1,29 +1,11 @@
 <resources>
     <string name="app_name">Paper</string>
-    <string name="tagline">Turn your whole screen into an e-reader</string>
-
-    <string name="mode_off">Off</string>
-    <string name="mode_day">Day</string>
-    <string name="mode_night">Night</string>
-    <string name="mode_auto">Auto</string>
-
+    <string name="on">On</string>
+    <string name="off">Off</string>
+    <string name="tone">Paper tone: %1$d%%</string>
+    <string name="warmth">Warm light: %1$d%%</string>
     <string name="setup_title">One-time setup</string>
-    <string name="setup_body">Enable Developer options, turn on USB debugging (and "USB debugging (Security settings)" on Xiaomi), connect the phone to a computer and run:</string>
+    <string name="setup_body">Turn on USB debugging (on Xiaomi also "USB debugging (Security settings)"), connect the phone to a computer and run:</string>
     <string name="copy">Copy command</string>
     <string name="copied">Copied</string>
-
-    <string name="day_look">Day look</string>
-    <string name="night_look">Night look</string>
-    <string name="grayscale">Grayscale (e-ink colors)</string>
-    <string name="contrast">High-contrast text</string>
-    <string name="no_anim">No animations</string>
-    <string name="xiaomi_paper">Xiaomi reading mode (if available)</string>
-    <string name="warmth">Blue-light filter: %1$d%%</string>
-    <string name="dim">Extra dim: %1$d%%</string>
-
-    <string name="schedule">Auto schedule</string>
-    <string name="night_from">Night starts</string>
-    <string name="night_to">Night ends</string>
-    <string name="schedule_hint">In Auto mode the Night look is used between these times, the Day look the rest of the day.</string>
-    <string name="footer">Changes only system display settings and puts everything back when you choose Off.</string>
 </resources>

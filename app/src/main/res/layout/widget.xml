@@ -1,29 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/widget_bg"
-    android:gravity="center"
-    android:orientation="horizontal"
-    android:padding="8dp">
+    android:padding="6dp">
 
     <TextView
-        android:id="@+id/w_off"
-        style="@style/Chip"
-        android:text="@string/mode_off" />
-
-    <TextView
-        android:id="@+id/w_day"
-        style="@style/Chip"
-        android:text="@string/mode_day" />
-
-    <TextView
-        android:id="@+id/w_night"
-        style="@style/Chip"
-        android:text="@string/mode_night" />
-
-    <TextView
-        android:id="@+id/w_auto"
-        style="@style/Chip"
-        android:text="@string/mode_auto" />
-</LinearLayout>
+        android:id="@+id/w_toggle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/outline_btn"
+        android:gravity="center"
+        android:textColor="@color/chip_text"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+</FrameLayout>
