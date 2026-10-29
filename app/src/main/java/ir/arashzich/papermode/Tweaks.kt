@@ -47,7 +47,8 @@ object Tweaks {
 
     fun apply(c: Context, s: Store) {
         if (!hasPermission(c)) return
-        val backup = s.saved().toMutableMap()
+        // Take the backup only from an untouched phone; while we are applied, keep the first one.
+        val backup = if (s.applied) s.saved().toMutableMap() else mutableMapOf()
         fun set(k: Key, v: String) {
             backup.getOrPut(k.name) { read(c, k) ?: UNSET }
             write(c, k, v)
@@ -63,14 +64,21 @@ object Tweaks {
         if (s.warmth > 0) { set(WARM_ON, "1"); set(WARM_TEMP, kelvin(s.warmth).toString()) } else set(WARM_ON, "0")
 
         s.saveBackup(backup)
+        s.applied = true
     }
 
     fun restore(c: Context) {
         if (!hasPermission(c)) return
         val s = Store(c)
-        val byName = ALL.associateBy { it.name }
-        s.saved().forEach { (name, v) -> byName[name]?.let { write(c, it, if (v == UNSET) null else v) } }
+        if (!s.applied) return // nothing of ours is on the screen, leave the phone's own settings alone
+        val backup = s.saved()
+        ALL.forEach { k ->
+            // No saved value (should not happen) -> the Android default for that key.
+            val v = backup[k.name] ?: if (k === GRAY_ON) "0" else if (k.global) "1.0" else UNSET
+            write(c, k, if (v == UNSET) null else v)
+        }
         s.saveBackup(emptyMap())
+        s.applied = false
     }
 
     /** 1..100 % -> 4082 K (barely warm) .. 2596 K (very warm), the range Night Light accepts. */

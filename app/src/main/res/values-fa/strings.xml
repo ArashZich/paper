@@ -1,9 +1,23 @@
 <resources>
     <string name="app_name">کاغذ</string>
+    <string name="tagline">صفحه‌ات، مثل کاغذ</string>
     <string name="on">روشن</string>
     <string name="off">خاموش</string>
+    <string name="tap_on">برای روشن‌کردن بزن</string>
+    <string name="tap_off">برای خاموش‌کردن بزن</string>
+
+    <string name="look">ظاهر</string>
+    <string name="preset_kindle">کیندل</string>
+    <string name="preset_boox">بوکس</string>
+    <string name="preset_night">شب</string>
     <string name="tone">تُن کاغذ: %1$d٪</string>
     <string name="warmth">نور گرم: %1$d٪</string>
+
+    <string name="schedule">زمان‌بندی</string>
+    <string name="schedule_hint">در این ساعت‌ها خودش روشن و خاموش می‌شود</string>
+    <string name="from">از</string>
+    <string name="to">تا</string>
+
     <string name="setup_title">تنظیم یک‌باره</string>
     <string name="setup_body">USB debugging را روشن کن (در شیائومی «USB debugging (Security settings)» هم)، گوشی را به کامپیوتر وصل کن و این دستور را بزن:</string>
     <string name="copy">کپی دستور</string>
